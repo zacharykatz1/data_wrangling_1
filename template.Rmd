@@ -6,6 +6,7 @@ output: github_document
 ```{r, echo=FALSE, message=FALSE}
 library(tidyverse)
 library(readxl)
+library(haven)
 ```
 
 ## Import some data
@@ -72,4 +73,19 @@ tail(litters_data)
 ```{r}
 mlb11_df = read_excel("Data/mlb11.xlsx")
 mlb11_df
+```
+
+LOTR words is next. We can control how much of the excel we read in using 'range.'
+
+```{r}
+fellow_df = read_excel("Data/LotR_Words.xlsx", range = "B3:D6")
+fellow_df
+```
+
+## Read a SAS file
+
+You can read in from SAS, Stata, SPSS, and a number of other filetypes. Suppose we want to read in a SAS file. The below doesn't work, but we're trying!
+
+```{r, eval=FALSE}
+pulse_df = read_sas("Data/public_pulse_data.sas7bdat")
 ```

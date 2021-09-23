@@ -173,3 +173,28 @@ mlb11_df
     ## 10 Houston A…   615    5598  1442       95   0.258       1164          118    56
     ## # … with 20 more rows, and 3 more variables: new_onbase <dbl>, new_slug <dbl>,
     ## #   new_obs <dbl>
+
+LOTR words is next. We can control how much of the excel we read in
+using ‘range.’
+
+``` r
+fellow_df = read_excel("Data/LotR_Words.xlsx", range = "B3:D6")
+fellow_df
+```
+
+    ## # A tibble: 3 × 3
+    ##   Race   Female  Male
+    ##   <chr>   <dbl> <dbl>
+    ## 1 Elf      1229   971
+    ## 2 Hobbit     14  3644
+    ## 3 Man         0  1995
+
+## Read a SAS file
+
+You can read in from SAS, Stata, SPSS, and a number of other filetypes.
+Suppose we want to read in a SAS file. The below doesn’t work, but we’re
+trying!
+
+``` r
+pulse_df = read_sas("Data/public_pulse_data.sas7bdat")
+```
