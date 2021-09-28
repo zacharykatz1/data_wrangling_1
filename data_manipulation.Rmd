@@ -14,4 +14,103 @@ I want to import `FAS_litters.csv`.
 ```{r message=FALSE, warning=FALSE}
 litters_df = read_csv("data/FAS_litters.csv")
 litters_df = janitor::clean_names(litters_df)
+
+pups_df = read_csv("data/FAS_pups.csv")
+pups_df = janitor::clean_names(pups_df)
+```
+
+## `Select` function
+
+Let's select some columns.
+
+```{r}
+select(litters_df, group, litter_number)
+select(litters_df, group, gd0_weight, gd18_weight)
+
+# Colon to include everything between one column and another
+select(litters_df, group, gd0_weight:gd_of_birth)
+
+# Can do starts_with, ends_with, contains
+select(litters_df, group, starts_with("pups"))
+
+# Minus sign if you want to keep most things but not a limited number
+select(litters_df, -litter_number)
+
+# Can rename variable during select
+select(litters_df, GROUP = group, litter_number)
+
+# There is also a rename function that doesn't rename, in original df
+rename(litters_df, GROUP = group)
+
+# In select, might rearrange columns
+# Everything function says let's keep everything, but listing litter_number first puts that column first
+select(litters_df, litter_number, everything())
+
+# Relocate function also lets you put a column first
+relocate(litters_df, litter_number)
+
+# Selected columns from pups_df dataset
+select(pups_df, litter_number, sex, pd_ears)
+```
+
+## Filter rows
+
+Let's get rid of rows...
+
+```{r}
+# Keep rows with gestational day of birth equals to 20
+filter(litters_df, gd_of_birth == 20)
+
+# Keep where group = Con7
+filter(litters_df, group == "Con7")
+
+# Filter with gestational day 0 weight of less than 23
+filter(litters_df, gd0_weight < 23)
+
+# More examples
+filter(litters_df, pups_survive != 4)
+filter(litters_df, !group == "Con7")
+
+# Using %in%
+filter(litters_df, group %in% c("Con7, Con8"))
+
+# More than one condition (want X and Y to both be true)
+# This may be preferable to using &, though this can also be done
+filter(litters_df, group == "Con7", gd_of_birth == 20)
+
+# Use | for 'or'
+filter(litters_df, group == "Con7" | gd_of_birth == 20)
+
+# Drop NA from litters df
+drop_na(litters_df)
+
+# If only want to drop rows where NA is in a particular variable
+drop_na(litters_df, gd0_weight)
+```
+
+## Mutate
+
+Let's add or change columns.
+
+```{r}
+# Create new variables as functions of existing ones
+mutate(
+  litters_df, 
+  weight_change = gd18_weight - gd0_weight,
+  group = str_to_lower(group))
+```
+
+## Arrange
+
+Let's rearrange the data; very useful for seeing if the data is structured as expected.
+
+```{r}
+# Arrange by gd0_weight (ascending is default)
+arrange(litters_df, gd0_weight)
+
+# Try descending
+arrange(litters_df, desc(gd0_weight))
+
+# Arrange by multiple variables
+arrange(litters_df, gd_of_birth, gd0_weight)
 ```
