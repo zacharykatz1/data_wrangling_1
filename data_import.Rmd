@@ -86,6 +86,8 @@ fellow_df
 
 You can read in from SAS, Stata, SPSS, and a number of other filetypes. Suppose we want to read in a SAS file. The below doesn't work, but we're trying!
 
+# Re-download this SAS data set later; Dr. Goldsmith fixed it so it loads
+
 ```{r, eval=FALSE}
 pulse_df = read_sas("Data/public_pulse_data.sas7bdat")
 ```
@@ -99,11 +101,11 @@ litters_df_base = read.csv("Data/FAS_litters.csv")
 litters_df_base
 ```
 
-There are a bunch of reasons to use `read_csv` rather than `read.csv` because of all kinds of things that happen in the background.
+There are a bunch of reasons to use `read_csv` rather than `read.csv` because of all kinds of things that happen in the background. `read.csv` doesn't give a tibble, for one.
 
 ## How do I export data?
 
-Instead of reading data in, we're going to write data out.
+Instead of reading data in, we're going to write data out. Again, use `write_csv` rather than `read_csv`.
 
 ```{r}
 write_csv(fellow_df, "Data/fellowship_words.csv")
