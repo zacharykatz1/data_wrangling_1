@@ -9,3 +9,33 @@ library(readxl)
 library(haven)
 ```
 
+## Pivot longer
+
+```{r}
+
+# Import data
+pulse_df = 
+  read_sas("Data/public_pulse_data.sas7bdat") %>% 
+  janitor::clean_names()
+
+pulse_df
+
+# Pivot longer
+pulse_tidy = 
+  pulse_df %>% 
+  pivot_longer(
+    bdi_score_bl:bdi_score_12m,
+    names_to = "visit",
+    # Get rid of bdi_score_ bit before the value for visit variable
+    names_prefix = "bdi_score_",
+    values_to = "bdi_score"
+  ) %>% 
+  mutate(
+    # In this variable, look for every instance where variable == bl, and everywhere that condition is true, replace with 00m
+    visit = replace(visit, visit == "bl", "00m"),
+    # Often easier to think of categoricals as factors, rather than character variables
+    visit = factor(visit)
+  )
+
+pulse_tidy
+```
