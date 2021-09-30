@@ -111,6 +111,34 @@ lotr_df
 Look at FAS data
 
 ```{r}
+# Read in litters data and start tidying
 litters_df =
-  read_csv("Data/FAS_litters.csv")
+  read_csv("Data/FAS_litters.csv") %>% 
+  janitor::clean_names() %>% 
+  # Split on 3rd position; right now, Con7, eg, is two variables smushed together
+  separate(group, into = c("dose", "day_of_treatment"), 3) %>% 
+  # Move litter_number first since it'll be key to another data set
+  relocate(litter_number) %>% 
+  mutate(dose = str_to_lower(dose))
+litters_df
+
+# Read in pups data
+pups_df = 
+  read_csv("Data/FAS_pups.csv") %>% 
+  janitor::clean_names() %>% 
+  # Replace 1 and 0 with male/female in sex variable
+  # Use backticks around 1 and 2 to recognize them as variables, not numbers
+  mutate(sex = recode(sex, `1` = "male", `2` = "female"))
+pups_df
 ```
+
+Now let's join these up. We want to eventually figure out: is there something about dose that tells me something about postnatal day on which something happens?
+
+```{r}
+fas_df = 
+  left_join(pups_df, litters_df, by = "litter_number") %>% 
+  relocate(litter_number, dose, day_of_treatment)
+fas_df
+```
+
+Note for later: never use gather, just use pivot_longer. Also: never use spread, just use pivot_wider.
